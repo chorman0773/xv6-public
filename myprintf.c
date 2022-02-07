@@ -763,10 +763,13 @@ int myvfprintf(FILE* __fp,const char* __fmt,va_list __ap){
                 .ap = &__ap,
                 .resetbuf_cb = file_write_fmt_buf,
                 .buf = ibuf,
+                .blen = 1024,
                 .ctotal = chars,
                 .look = convert+1,
             };
             if(convert_one(&st)==ABORT)
+                return EOF;
+            if(myfwrite(ibuf1,1,st.bpos,__fp)==EOF)
                 return EOF;
             __fmt = st.look;
             chars = st.ctotal;
